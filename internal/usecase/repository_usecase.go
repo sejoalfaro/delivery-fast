@@ -14,7 +14,7 @@ func NewRepoUseCase(repository repository.Repository) *RepositoryUseCase {
 }
 
 func (uc *RepositoryUseCase) AddRepository(url, branch string) error {
-	repo := &domain.Repository{URL: url, Branch: branch}
+	repo := domain.NewRepository(url, branch)
 
 	if err := repo.Validar(); err != nil {
 		return err

@@ -15,7 +15,7 @@ var addRepoCmd = &cobra.Command{
 	Short: "Agrega un nuevo repositorio a la lista de monitorización",
 	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		db, err := sql.Open("sqlite3", "./repos.db")
+		db, err := sql.Open("sqlite", repository.DBFileName)
 		if err != nil {
 			fmt.Println("Error al inicializar la base de datos:", err)
 			return

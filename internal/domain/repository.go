@@ -1,11 +1,23 @@
 package domain
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/google/uuid"
+)
 
 type Repository struct {
-	ID     int
+	ID     string
 	URL    string
 	Branch string
+}
+
+func NewRepository(url, branch string) *Repository {
+	return &Repository{
+		ID:     uuid.NewString(),
+		URL:    url,
+		Branch: branch,
+	}
 }
 
 func (r *Repository) Validar() error {
