@@ -6,21 +6,23 @@ import (
 	"github.com/google/uuid"
 )
 
-type Repository struct {
+type Application struct {
 	ID     string
+	Name   string
 	URL    string
 	Branch string
 }
 
-func NewRepository(url, branch string) *Repository {
-	return &Repository{
+func NewRepository(url, name, branch string) *Application {
+	return &Application{
 		ID:     uuid.NewString(),
 		URL:    url,
+		Name:   name,
 		Branch: branch,
 	}
 }
 
-func (r *Repository) Validar() error {
+func (r *Application) Validar() error {
 	if r.URL == "" {
 		return fmt.Errorf("URL cannot be empty")
 	}

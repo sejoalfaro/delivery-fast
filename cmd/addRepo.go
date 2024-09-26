@@ -9,31 +9,44 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Definición del comando `add-repo`.
+var name, branch string
+
 var addRepoCmd = &cobra.Command{
-	Use:   "add-repo [url] [branch]",
-	Short: "Agrega un nuevo repositorio a la lista de monitorización",
-	Args:  cobra.ExactArgs(2),
+	Use:   "add-repo [url] -n \"[name]\" -b \"[branch]\"",
+	Short: "Add a new repository with a branch to track changes",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		if name == "" || branch == "" {
+			fmt.Println("Error: Flag name and branch are required")
+			cmd.Usage()
+			return
+		}
+
 		db, err := sql.Open("sqlite", repository.DBFileName)
 		if err != nil {
-			fmt.Println("Error al inicializar la base de datos:", err)
+			fmt.Println("Error to init the database", err)
 			return
 		}
 		defer db.Close()
 
-		// Crear el repositorio y el caso de uso.
 		repoRepository := repository.NewSQLiteRepo(db)
-		repoUseCase := usecase.NewRepoUseCase(repoRepository)
+		repoUseCase := usecase.NewApplicationUseCase(repoRepository)
 
 		url := args[0]
-		branch := args[1]
 
-		err = repoUseCase.AddRepository(url, branch)
+		err = repoUseCase.AddApplication(url, name, branch)
 		if err != nil {
-			fmt.Println("Error al agregar el repositorio:", err)
+			fmt.Printf("Error adding a new repository: %s\n", err)
 		} else {
-			fmt.Println("Repositorio agregado exitosamente:", url)
+			fmt.Println("New repository have been created.")
 		}
 	},
+}
+
+func init() {
+	addRepoCmd.Flags().StringVarP(&name, "name", "n", "", "Name of the repository (required)")
+	addRepoCmd.Flags().StringVarP(&branch, "branch", "b", "", "Branch of the repository (required)")
+	addRepoCmd.MarkFlagRequired("name")
+	addRepoCmd.MarkFlagRequired("branch")
+	rootCmd.AddCommand(addRepoCmd)
 }

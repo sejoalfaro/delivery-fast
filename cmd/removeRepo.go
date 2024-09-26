@@ -9,29 +9,32 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Definición del comando `remove-repo`.
 var removeRepoCmd = &cobra.Command{
-	Use:   "remove-repo [url]",
-	Short: "Elimina un repositorio de la lista de monitorización",
+	Use:   "remove-repo [name]",
+	Short: "Remove a repository by its Name",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		db, err := sql.Open("sqlite3", "./repos.db")
+		db, err := sql.Open("sqlite", repository.DBFileName)
 		if err != nil {
-			fmt.Println("Error al inicializar la base de datos:", err)
+			fmt.Println("Error to init db:", err)
 			return
 		}
 		defer db.Close()
 
 		database := repository.NewSQLiteRepo(db)
-		repoUseCase := usecase.NewRepoUseCase(database)
+		repoUseCase := usecase.NewApplicationUseCase(database)
 
-		url := args[0]
+		name := args[0]
 
-		err = repoUseCase.RemoveRepository(url)
+		err = repoUseCase.RemoveApplication(name)
 		if err != nil {
-			fmt.Println("Error al eliminar el repositorio:", err)
+			fmt.Println("Error removing the repository:", err)
 		} else {
-			fmt.Println("Repositorio eliminado exitosamente:", url)
+			fmt.Println("The repository has been removed:", name)
 		}
 	},
+}
+
+func init() {
+	rootCmd.AddCommand(removeRepoCmd)
 }
