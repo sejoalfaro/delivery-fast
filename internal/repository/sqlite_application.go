@@ -14,7 +14,7 @@ type SQLiteApplication struct {
 var DBFileName = "./delivery.db"
 var dbTableBame = "repository"
 
-func NewSQLiteRepo(db *sql.DB) Application {
+func NewSQLiteApplication(db *sql.DB) Application {
 	createTableQuery := fmt.Sprintf(`CREATE TABLE IF NOT EXISTS %s (
         id TEXT PRIMARY KEY NOT NULL,
 		name TEXT NOT NULL UNIQUE,

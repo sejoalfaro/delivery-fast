@@ -4,6 +4,7 @@ Copyright © 2024 delivery-fast <josealfacr@gmail.com>
 package cmd
 
 import (
+	cmd "delivery/cmd/app"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -13,7 +14,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "delivery",
 	Short: "A tool for managing the delivery of software",
-	Long:  `A tool for managing the delivery of software. This tool is used to track the repositories that are being used to launch the software.`,
+	Long:  `This tool is used to manage the delivery of software, it is possible to add, list and remove applications.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -29,6 +30,7 @@ func Execute() {
 }
 
 func init() {
+	rootCmd.AddCommand(cmd.AppCmd)
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.

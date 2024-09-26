@@ -10,8 +10,8 @@ import (
 )
 
 var removeRepoCmd = &cobra.Command{
-	Use:   "remove-repo [name]",
-	Short: "Remove a repository by its Name",
+	Use:   "remove [name]",
+	Short: "Remove an application by its name",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		db, err := sql.Open("sqlite", repository.DBFileName)
@@ -21,20 +21,20 @@ var removeRepoCmd = &cobra.Command{
 		}
 		defer db.Close()
 
-		database := repository.NewSQLiteRepo(db)
+		database := repository.NewSQLiteApplication(db)
 		repoUseCase := usecase.NewApplicationUseCase(database)
 
 		name := args[0]
 
 		err = repoUseCase.RemoveApplication(name)
 		if err != nil {
-			fmt.Println("Error removing the repository:", err)
+			fmt.Println("Error removing the application:", err)
 		} else {
-			fmt.Println("The repository has been removed:", name)
+			fmt.Println("The application has been removed:", name)
 		}
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(removeRepoCmd)
+	AppCmd.AddCommand(removeRepoCmd)
 }
