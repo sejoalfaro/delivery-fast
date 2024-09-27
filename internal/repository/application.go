@@ -2,8 +2,8 @@ package repository
 
 import "delivery/internal/domain"
 
-// RepoRepository es la interfaz que define las operaciones CRUD para los repositorios.
-type Application interface {
+// ApplicationInterface is an interface to interact with the application repository
+type ApplicationInterface interface {
 	Add(repository *domain.Application) error
 	RemoveByID(id string) error
 	RemoveByName(name string) error

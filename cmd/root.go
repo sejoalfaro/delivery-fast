@@ -4,7 +4,8 @@ Copyright © 2024 delivery-fast <josealfacr@gmail.com>
 package cmd
 
 import (
-	cmd "delivery/cmd/app"
+	app "delivery/cmd/app"
+	deploy "delivery/cmd/deploy"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -30,7 +31,8 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.AddCommand(cmd.AppCmd)
+	rootCmd.AddCommand(app.AppCmd)
+	rootCmd.AddCommand(deploy.DeployCmd)
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.

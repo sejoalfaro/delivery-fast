@@ -29,7 +29,7 @@ var addApplicationCmd = &cobra.Command{
 		}
 		defer db.Close()
 
-		appRepository := repository.NewSQLiteApplication(db)
+		appRepository := repository.NewApplicationSQLRepository()
 		appUseCase := usecase.NewApplicationUseCase(appRepository)
 
 		name := args[0]

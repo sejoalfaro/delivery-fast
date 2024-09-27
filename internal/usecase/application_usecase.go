@@ -6,15 +6,15 @@ import (
 )
 
 type ApplicationUseCase struct {
-	application repository.Application
+	application repository.ApplicationInterface
 }
 
-func NewApplicationUseCase(application repository.Application) *ApplicationUseCase {
+func NewApplicationUseCase(application repository.ApplicationInterface) *ApplicationUseCase {
 	return &ApplicationUseCase{application: application}
 }
 
 func (uc *ApplicationUseCase) AddApplication(url, name, branch string) error {
-	repo := domain.NewRepository(url, name, branch)
+	repo := domain.NewApplication(url, name, branch)
 	if err := repo.Validar(); err != nil {
 		return err
 	}

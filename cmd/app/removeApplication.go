@@ -21,7 +21,7 @@ var removeRepoCmd = &cobra.Command{
 		}
 		defer db.Close()
 
-		database := repository.NewSQLiteApplication(db)
+		database := repository.NewApplicationSQLRepository()
 		repoUseCase := usecase.NewApplicationUseCase(database)
 
 		name := args[0]

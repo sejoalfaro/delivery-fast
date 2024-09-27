@@ -5,7 +5,7 @@ package main
 
 import (
 	"delivery/cmd"
-	_ "modernc.org/sqlite"
+	_ "delivery/internal/repository"
 )
 
 func main() {

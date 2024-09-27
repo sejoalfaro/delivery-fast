@@ -21,7 +21,7 @@ var listReposCmd = &cobra.Command{
 		}
 		defer db.Close()
 
-		repoRepo := repository.NewSQLiteApplication(db)
+		repoRepo := repository.NewApplicationSQLRepository()
 		repoUseCase := usecase.NewApplicationUseCase(repoRepo)
 
 		repos, err := repoUseCase.ListApplications()

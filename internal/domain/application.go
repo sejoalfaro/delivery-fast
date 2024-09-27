@@ -13,7 +13,7 @@ type Application struct {
 	Branch string
 }
 
-func NewRepository(url, name, branch string) *Application {
+func NewApplication(url, name, branch string) *Application {
 	return &Application{
 		ID:     uuid.NewString(),
 		URL:    url,
