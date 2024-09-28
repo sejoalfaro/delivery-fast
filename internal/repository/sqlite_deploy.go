@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"delivery/internal/domain"
+	"fmt"
 )
 
 // DepolySQLiteRepository is a struct that represents the deploy repository
@@ -11,28 +12,29 @@ type DepolySQLiteRepository struct {
 }
 
 // NewDeploySQLiteRepository is a function that creates a new deploy repository
-func NewDeploySQLiteRepository(db *sql.DB) DeployInterface {
-	return &DepolySQLiteRepository{db: db}
+func NewDeploySQLiteRepository() DeployInterface {
+	return &DepolySQLiteRepository{db: DB}
 }
 
 // Add is a function that adds a new deploy
 func (r *DepolySQLiteRepository) Add(deploy *domain.Deploy) error {
 	var insertQuery = `
-	INSERT INTO deploy (name, application, environment, domain, traefik_rule, version) 
-	VALUES (?, ?, ?, ?, ?, ?)
+	INSERT INTO deployment (id, name, application_id, environment, domain, traefik_rule, version) 
+	VALUES (?, ?, ?, ?, ?, ?, ?)
 	`
+	fmt.Printf("Inserting deploy... %+v\n", deploy)
 	stmt, err := r.db.Prepare(insertQuery)
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
-	_, err = stmt.Exec(deploy.Name, deploy.Application, deploy.Environment, deploy.Domain, deploy.TraefikRule, deploy.Version)
+	_, err = stmt.Exec(deploy.ID, deploy.Name, deploy.Application_ID, deploy.Environment, deploy.Domain, deploy.TraefikRule, deploy.Version)
 	return err
 }
 
 // RemoveByName is a function that removes a deploy by name
 func (r *DepolySQLiteRepository) RemoveByName(name string) error {
-	var deleteQuery = "DELETE FROM deploy WHERE name = ?"
+	var deleteQuery = "DELETE FROM deployment WHERE name = ?"
 	stmt, err := r.db.Prepare(deleteQuery)
 	if err != nil {
 		return err
@@ -44,7 +46,7 @@ func (r *DepolySQLiteRepository) RemoveByName(name string) error {
 
 // FindAll is a function that returns all deploys
 func (r *DepolySQLiteRepository) FindAll() ([]*domain.Deploy, error) {
-	var findAllQuery = "SELECT name, application, environment, domain, traefik_rule, version FROM deploy"
+	var findAllQuery = "SELECT name, application, environment, domain, traefik_rule, version FROM deployment"
 	rows, err := r.db.Query(findAllQuery)
 	if err != nil {
 		return nil, err
@@ -53,7 +55,7 @@ func (r *DepolySQLiteRepository) FindAll() ([]*domain.Deploy, error) {
 	deployments := make([]*domain.Deploy, 0)
 	for rows.Next() {
 		deploy := &domain.Deploy{}
-		if err := rows.Scan(&deploy.Name, &deploy.Application, &deploy.Environment, &deploy.Domain, &deploy.TraefikRule, &deploy.Version); err != nil {
+		if err := rows.Scan(&deploy.Name, &deploy.Application_ID, &deploy.Environment, &deploy.Domain, &deploy.TraefikRule, &deploy.Version); err != nil {
 			return nil, err
 		}
 		deployments = append(deployments, deploy)
@@ -63,10 +65,10 @@ func (r *DepolySQLiteRepository) FindAll() ([]*domain.Deploy, error) {
 
 // FindByName is a function that returns a deploy by name
 func (r *DepolySQLiteRepository) FindByName(name string) (*domain.Deploy, error) {
-	var findOneQuery = "SELECT name, application, environment, domain, traefik_rule, version FROM deploy WHERE name = ?"
+	var findOneQuery = "SELECT name, application, environment, domain, traefik_rule, version FROM deployment WHERE name = ?"
 	row := r.db.QueryRow(findOneQuery, name)
 	deploy := &domain.Deploy{}
-	if err := row.Scan(&deploy.Name, &deploy.Application, &deploy.Environment, &deploy.Domain, &deploy.TraefikRule, &deploy.Version); err != nil {
+	if err := row.Scan(&deploy.Name, &deploy.Application_ID, &deploy.Environment, &deploy.Domain, &deploy.TraefikRule, &deploy.Version); err != nil {
 		return nil, err
 	}
 	return deploy, nil
@@ -74,7 +76,7 @@ func (r *DepolySQLiteRepository) FindByName(name string) (*domain.Deploy, error)
 
 // FindByApplication is a function that returns all deploys by application
 func (r *DepolySQLiteRepository) FindByApplication(application string) ([]*domain.Deploy, error) {
-	findQuery := "SELECT name, application, environment, domain, traefik_rule, version FROM deploy WHERE application = ?"
+	findQuery := "SELECT name, application, environment, domain, traefik_rule, version FROM deployment WHERE application = ?"
 	rows, err := r.db.Query(findQuery, application)
 	if err != nil {
 		return nil, err
@@ -83,7 +85,7 @@ func (r *DepolySQLiteRepository) FindByApplication(application string) ([]*domai
 	deployments := make([]*domain.Deploy, 0)
 	for rows.Next() {
 		deploy := &domain.Deploy{}
-		if err := rows.Scan(&deploy.Name, &deploy.Application, &deploy.Environment, &deploy.Domain, &deploy.TraefikRule, &deploy.Version); err != nil {
+		if err := rows.Scan(&deploy.Name, &deploy.Application_ID, &deploy.Environment, &deploy.Domain, &deploy.TraefikRule, &deploy.Version); err != nil {
 			return nil, err
 		}
 		deployments = append(deployments, deploy)

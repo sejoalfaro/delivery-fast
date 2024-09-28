@@ -45,7 +45,10 @@ func createTableDeployment() error {
 	createTableQuery := `
 	CREATE TABLE IF NOT EXISTS deployment (
 	id TEXT PRIMARY KEY NOT NULL,
+	name TEXT NOT NULL,
 	application_id TEXT NOT NULL,
+	domain TEXT NOT NULL,
+	traefik_rule TEXT NULL,
 	environment TEXT NULL,
 	version TEXT,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

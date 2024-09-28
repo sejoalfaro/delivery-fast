@@ -83,9 +83,10 @@ func (r *SQLiteApplication) FindByID(id string) (*domain.Application, error) {
 func (r *SQLiteApplication) FindByName(name string) (*domain.Application, error) {
 	var app domain.Application
 	var FindByNameQuery = fmt.Sprintf("SELECT id, name, url, branch FROM %s WHERE name = ?", applicationTableName)
-	row := r.db.QueryRow(FindByNameQuery)
+	row := r.db.QueryRow(FindByNameQuery, name)
 	err := row.Scan(&app.ID, &app.Name, &app.URL, &app.Branch)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 	return &app, nil

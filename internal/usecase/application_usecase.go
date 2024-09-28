@@ -22,6 +22,10 @@ func (uc *ApplicationUseCase) AddApplication(url, name, branch string) error {
 	return uc.application.Add(repo)
 }
 
+func (uc *ApplicationUseCase) FindApplication(name string) (*domain.Application, error) {
+	return uc.application.FindByName(name)
+}
+
 func (uc *ApplicationUseCase) ListApplications() ([]*domain.Application, error) {
 	return uc.application.FindAll()
 }

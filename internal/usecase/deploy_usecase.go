@@ -16,8 +16,7 @@ func NewDeployUseCase(deploy repository.DeployInterface) *DeployUseCase {
 }
 
 // AddDeploy is a function that adds a new deploy
-func (uc *DeployUseCase) AddDeploy(name, application, environment, domainName, traefikRule, version string) error {
-	deploy := domain.NewDeploy(name, application, environment, domainName, traefikRule, version)
-
+func (uc *DeployUseCase) AddDeploy(name, applicationId, environment, domainName, traefikRule, version string) error {
+	deploy := domain.NewDeploy(name, applicationId, environment, domainName, traefikRule, version)
 	return uc.deploy.Add(deploy)
 }
